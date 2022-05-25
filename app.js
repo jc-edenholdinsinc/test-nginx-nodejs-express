@@ -1,34 +1,43 @@
 
-// const client = require('@mailchimp/mailchimp_marketing');
+require("dotenv").config()
+const client = require('@mailchimp/mailchimp_marketing');
+client.setConfig({
+  apiKey: process.env.MAILCHIMP_API_KEY,
+  server: process.env.MAILCHIMP_SERVER_PREFIX,
+});
 
-// mailchimp api: af264fb16b9220ae70f5907cf6b2d2d9-us12
-// audience id: b0d1082743
-// server: us12
+const run = async () => {
+  const response = await client.lists.addListMember(process.env.MAILCHIMP_AUDIENCE_ID, {
+    email_address: "jcsantosdevtest6@gmail.com",
+    status: "subscribed",
+  });
 
-// const audienceId = b0d1082743;
-// client.setConfig({
-//   apiKey: "af264fb16b9220ae70f5907cf6b2d2d9-us12",
-//   server: "us12",
+  if (response.errors.length) {
+    throw new Error(response.errors);
+  } else {
+      console.log("no issue!");
+  }
+
+//   console.log(JSON.stringify(response))
+//   console.log(searchParams.get('status'));
+};
+
+run().catch(errors => console.log(errors));
+
+
+// const express = require("express");
+// const bodyParser = require('body-parser');
+// const cors = require("cors")
+// const app = express();
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// app.post('/subscribe', cors(), (req, res) => {
+//     console.log(req.body)
+//     res.json(req.body)
 // });
 
-// const run = async () => {
-//   const response = await client.lists.addListMember(audienceId, {
-//     email_address: "jcsantosdevtest4@gmail.com",
-//     status: "subscribed",
-//   });
-//   console.log(response);
-// };
-
-// run();
-
-const express = require("express");
-
-const app = express();
-
-app.post('/subscribe', (req, res) => {
-
-});
-
-app.listen(5000, () => {
-    console.log('App listening on port 5000!');
-});
+// app.listen(5000, () => {
+//     console.log('App listening on port 5000!');
+// });
